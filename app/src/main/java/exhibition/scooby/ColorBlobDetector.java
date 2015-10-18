@@ -1,6 +1,7 @@
 package exhibition.scooby;
 
 import android.util.Log;
+
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -8,9 +9,15 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+/**
+ * @author Nilanjan
+ * @version 1.0.1
+ */
 
 public class ColorBlobDetector {
 
@@ -39,6 +46,11 @@ public class ColorBlobDetector {
         mColorRadius = radius;
     }
 
+    /**
+     * Sets te HSV color to track
+     * minimum and maximum thresholds are set
+     * @param hsvColor
+     */
     public void setHsvColor(Scalar hsvColor) {
         double minH = (hsvColor.val[0] >= mColorRadius.val[0]) ? hsvColor.val[0]-mColorRadius.val[0] : 0;
         double maxH = (hsvColor.val[0]+mColorRadius.val[0] <= 255) ? hsvColor.val[0]+mColorRadius.val[0] : 255;
@@ -73,6 +85,11 @@ public class ColorBlobDetector {
         mMinContourArea = area;
     }
 
+    /**
+     * The main processor method
+     * Finds the most dominant contour matching the color RGBA received from the Touch Listener
+     * @param rgbaImage The RGBA color matrix
+     */
     public void process(Mat rgbaImage) {
         Imgproc.pyrDown(rgbaImage, mPyrDownMat);
         Imgproc.pyrDown(mPyrDownMat, mPyrDownMat);

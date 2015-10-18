@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
+
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
@@ -28,8 +29,13 @@ import org.opencv.imgproc.Imgproc;
 
 import java.util.List;
 
+/**
+ * @author Nilanjan
+ * @version 1.0.1
+ */
 public class MainActivity extends Activity implements View.OnTouchListener, CameraBridgeViewBase.CvCameraViewListener2 {
 
+    //Variables Section
     public static final String TAG = "Scooby:";
     private boolean mIsColorSelected = false;
     private Mat mRgba;
@@ -44,6 +50,9 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
     private CameraBridgeViewBase mOpenCvCameraView;
     String previousDirection = "";
 
+    /**
+     * Handler to display Toasts about direction of hand movement
+     */
     Handler handler=new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -51,10 +60,17 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
         }
     };
 
-            public MainActivity() {
+    /**
+     * Constructor: Just for debugging
+     */
+    public MainActivity() {
         Log.d(TAG, "New Object Instantiated " + this.getClass());
     }
 
+    /**
+     * Inner Class to check if the openCV library was successfully loaded.
+     * If true, then the openCV camera view is enabled and Touch Listener is activated
+     */
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
         public void onManagerConnected(int status) {
@@ -73,6 +89,10 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
         }
     };
 
+    /**
+     * Method to initialise the Activity and the layout
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +105,9 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
 
     }
 
+    /**
+     * If app is paused then Camera view will be disabled enabling Java garbage collector for resource reallocation.
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -92,6 +115,10 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
             mOpenCvCameraView.disableView();
     }
 
+    /**
+     * onResume will search for an inbuilt openCV library. If not found then will call openCV Manager for an appropriate
+     * openCV library. Here we are using openCV version 3.0.0
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -133,6 +160,11 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Initialising variables for color blob detection
+     * @param width -  the width of the frames that will be delivered
+     * @param height - the height of the frames that will be delivered
+     */
     @Override
     public void onCameraViewStarted(int width, int height) {
         mRgba = new Mat(height, width, CvType.CV_8UC4);
@@ -149,6 +181,11 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
         mRgba.release();
     }
 
+    /**
+     * Callback method: Will be called on receiving a new video frame
+     * @param inputFrame: The input new camera-frame received from the camera
+     * @return The RBGA color matrix of the frame
+     */
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.rgba();
@@ -183,6 +220,15 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
         return mRgba;
     }
 
+    /**
+     * Will process and compare the center of gravity of previous Dominant Contour with the new one
+     * and the previous Contour area with the new one Contour area to determine direction of motion of tracked object
+     * @param currentPoint The current Contour's Center Of Gravity
+     * @param newPoint The new Dominant Contour's Center Of Gravity
+     * @param currentArea The current Contour's area
+     * @param newArea The new Contour's area
+     * @return The direction of motion viz. Forward Backward Left Right Stop
+     */
     public String getDirection(Point currentPoint, Point newPoint, double currentArea, double newArea) {
 
         double displacementX = currentPoint.x - newPoint.x;
@@ -210,7 +256,12 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
         }
     }
 
-
+    /**
+     * Callback method: Determines the color matrix of the region touched and the its surrounding areas to determine the color blob to be tracked.
+     * @param v The view of the camera
+     * @param event The event callback
+     * @return Disables subsequent simultaneous call backs from touch listener
+     */
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         int cols = mRgba.cols();
@@ -262,6 +313,11 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
         return false; // don't need subsequent touch
     }
 
+    /**
+     * Converts a HSV color matrix into its corresponding RGBA color matrix
+     * @param hsvColor The HSV Scalar to be converted
+     * @return The corresponding RGBA Scalar
+     */
     private Scalar convertScalarHsv2Rgba(Scalar hsvColor) {
         Mat pointMatRgba = new Mat();
         Mat pointMatHsv = new Mat(1, 1, CvType.CV_8UC3, hsvColor);
