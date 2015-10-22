@@ -25,7 +25,7 @@ Scooby is currently in its phase 2 development stage. <br>
 <b> Hardware Requirements: </b>
 <br>
 1.	Arduino Uno/ Mega(preferred) <br>
-2.	Android version 5.0(api level 21) supported Mobile Phone with atleast 5MP camera.<br>
+2.	Android version 5.0(api level 21) or above, supported Mobile Phone with atleast 5MP camera.<br>
 3.	USB OTG cable.<br>
 4.	USB A to USB B cable.<br>
 5.	Motors and Motor drivers.<br>
