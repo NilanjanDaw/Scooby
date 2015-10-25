@@ -40,4 +40,4 @@ Scooby is currently in its phase 2 development stage. <br>
 5.	Arduino IDE.<br>
 6.	Git Bash(Latest Version)
 </p>
-<b> NB. For development purposes please create a separate branch and modify there. Merge with the master branch only if sure the code is working fine.</b>
+<b> NB. For development purposes please create a separate fork and modify there. Merge with the master branch only if sure the code is working fine.</b>
