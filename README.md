@@ -33,7 +33,7 @@ Scooby is currently in its phase 2 development stage. <br>
 <br>
 <b> Software Requirements: </b>
 <br>
-1.	Android studio 1.4+ with android api SDK 23.<br>
+1.	Android studio 1.4+ with android API 23.<br>
 2.	OpenCV 3.0.0<br>
 3.	OpenCV Manager on the android device.<br>
 4.	JDK 1.8+<br>
