@@ -5,3 +5,4 @@
 5.  http://www.instructables.com/id/Object-tracking-robot<br>
 6.  http://opencv.org<br>
 7.  https://developer.android.com/index.html
+8.  http://www.codeproject.com/Articles/8374/Tracking-an-object-from-a-live-video-input
