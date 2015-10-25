@@ -9,3 +9,4 @@
 9.  http://www.intorobotics.com/9-opencv-tutorials-hand-gesture-detection-recognition/
 10.  https://github.com/bengal/opencv-hand-detection                 - C code for object tracking
 11.  https://ccrma.stanford.edu/~mborins/256a/theremax/posts/hand-tracking/                   -Tutorial
+12.  http://eaglesky.github.io/blog/2014/03/27/color-based-hand-gesture-recognition-on-android/
