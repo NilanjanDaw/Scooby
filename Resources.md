@@ -14,3 +14,4 @@
 14.  http://cmusphinx.sourceforge.net/wiki/tutorialpocketsphinx -Speech Recognition Library
 15.  http://deeplearning.stanford.edu/tutorial/ -Deep Learning Tutorial
 16.  http://www.pyimagesearch.com/2014/09/22/getting-started-deep-learning-python/ -Deep Learning using python
+17.  http://catchoom.com/documentation/augmented-reality-sdk/android-augmented-reality-sdk/
