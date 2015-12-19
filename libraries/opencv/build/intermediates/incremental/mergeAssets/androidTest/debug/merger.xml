@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="debug"><source path="E:\Scooby\libraries\opencv\build\intermediates\bundles\debug\assets"/></dataSet><dataSet config="main"><source path="E:\Scooby\libraries\opencv\src\androidTest\assets"/></dataSet></merger>
+<merger version="3"><dataSet config="debug"><source path="E:\Projects\Scooby\libraries\opencv\build\intermediates\bundles\debug\assets"/></dataSet><dataSet config="main"><source path="E:\Projects\Scooby\libraries\opencv\src\androidTest\assets"/></dataSet></merger>

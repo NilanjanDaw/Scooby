@@ -1,6 +1,7 @@
 package exhibition.scooby;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import org.opencv.android.BaseLoaderCallback;
@@ -62,6 +64,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
     private double currentContourArea;
     private CameraBridgeViewBase mOpenCvCameraView;
     String previousDirection = "";
+    private Button bluetooth;
 
     /* Named searches allow to quickly reconfigure the decoder */
     private static final String KWS_SEARCH = "wakeup";
@@ -156,6 +159,15 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
                 }
             }
         }.execute();
+
+        bluetooth = (Button) findViewById(R.id.bluetooth);
+        bluetooth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), BluetoothActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     /**
