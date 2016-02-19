@@ -54,6 +54,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
     public static final String TAG = "Scooby:";
     private boolean mIsColorSelected = false;
     private Mat mRgba;
+    private Mat template;
     private Scalar mBlobColorRgba;
     private Scalar mBlobColorHsv;
     private ColorBlobDetector mDetector;
@@ -258,6 +259,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
         mRgba = inputFrame.rgba();
 
         if (mIsColorSelected) {
+            /**
             mDetector.process(mRgba);
             List<MatOfPoint> contours = mDetector.getContours();
             Log.e(TAG, "Contours count: " + contours.size());
@@ -282,9 +284,36 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
             currentContourCOG = new Point(ColorBlobDetector.centerOfGravity.x,
                     ColorBlobDetector.centerOfGravity.y);
             currentContourArea = ColorBlobDetector.contourArea;
+             **/
+            if(template != null) {
+                Log.e("Scooby", "template " + template.width() + " " + template.height() + " " + template.channels());
+                Point matchPoint = matchTemplateImage(template, mRgba);
+                //return template;
+            }
         }
-
+        Log.e("Scooby", "mRGBA " + mRgba.width() + " " + mRgba.height() + " " + mRgba.channels());
         return mRgba;
+    }
+
+    private Point matchTemplateImage(Mat template, Mat mRgba) {
+        Point matchPoint = new Point();
+        /**
+        if(template.channels() >= 3)
+            Imgproc.cvtColor(template, template, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.cvtColor(mRgba, mRgba, Imgproc.COLOR_BGR2GRAY);
+         **/
+        int result_cols =  mRgba.cols() - template.cols() + 1;
+        int result_rows = mRgba.rows() - template.rows() + 1;
+        Mat result = new Mat(result_cols, result_rows, CvType.CV_8U);
+        Imgproc.matchTemplate(mRgba, template, result, Imgproc.TM_CCOEFF_NORMED);
+        Core.MinMaxLocResult mmres =  Core.minMaxLoc(result);
+        matchPoint = mmres.maxLoc;
+        Point  matchPoint_tx = new Point(matchPoint.x+100,matchPoint.y+100);
+        Point  matchPoint_ty = new Point(matchPoint.x + template.cols() + 100 , matchPoint.y + template.rows()+100 );
+
+        Imgproc.rectangle(mRgba, matchPoint_tx, matchPoint_ty, new Scalar(255, 255, 0, 255));
+        return matchPoint;
+
     }
 
     /**
@@ -352,11 +381,18 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
         touchedRect.width = (x+4 < cols) ? x + 4 - touchedRect.x : cols - touchedRect.x;
         touchedRect.height = (y+4 < rows) ? y + 4 - touchedRect.y : rows - touchedRect.y;
 
+        Rect tempRect = new Rect();
+        tempRect.x = (x>4) ? x-4 : 0;
+        tempRect.y = (y>4) ? y-4 : 0;
+        tempRect.height = 100;
+        tempRect.width =  100;
         Mat touchedRegionRgba = mRgba.submat(touchedRect);
-
+        template = new Mat(mRgba, tempRect);
+        //mRgba.submat(tempRect).copyTo(template);
         Mat touchedRegionHsv = new Mat();
-        Imgproc.cvtColor(touchedRegionRgba, touchedRegionHsv, Imgproc.COLOR_RGB2HSV_FULL);
-
+        if(touchedRegionRgba.channels() >= 3)
+            Imgproc.cvtColor(touchedRegionRgba, touchedRegionHsv, Imgproc.COLOR_RGB2HSV_FULL);
+        /**
         // Calculate average color of touched region
         mBlobColorHsv = Core.sumElems(touchedRegionHsv);
         int pointCount = touchedRect.width*touchedRect.height;
@@ -376,6 +412,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
 
         touchedRegionRgba.release();
         touchedRegionHsv.release();
+         **/
 
         return false; // don't need subsequent touch
     }
@@ -418,7 +455,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
                 switchSearch(FORECAST_SEARCH);
                 break;
             default:
-                showText(text);
+                //showText(text);
                 break;
         }
     }
@@ -431,7 +468,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
 
         if (hypothesis != null) {
             String text = hypothesis.getHypstr();
-            makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+            //makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -458,7 +495,7 @@ public class MainActivity extends Activity implements View.OnTouchListener, Came
             recognizer.startListening(searchName, 15000);
 
         String caption = getResources().getString(captions.get(searchName));
-        showText(caption);
+        //showText(caption);
     }
 
     private void setupRecognizer(File assetsDir) throws IOException {
